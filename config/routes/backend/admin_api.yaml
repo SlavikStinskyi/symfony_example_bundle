@@ -1,0 +1,35 @@
+mobile_app_settings_api_backend_create:
+  path: '/'
+  methods:
+    - 'POST'
+  controller: 'mobile_app_settings.backend.api.create_mobile_setting_controller'
+
+mobile_app_settings_api_backend_edit:
+  path: '/{id}'
+  methods:
+    - 'PATCH'
+  controller: 'mobile_app_settings.backend.api.edit_mobile_setting_controller'
+
+mobile_app_settings_api_backend_delete:
+  path: '/{id}'
+  methods:
+    - 'DELETE'
+  controller: 'mobile_app_settings.backend.api.delete_mobile_setting_controller'
+
+mobile_app_settings_api_backend_get_single:
+  path: '/{id}'
+  methods:
+    - 'GET'
+  controller: 'mobile_app_settings.backend.api.get_mobile_setting_controller'
+
+mobile_app_settings_api_backend_get_list:
+  path: '/'
+  methods:
+    - 'GET'
+  controller: 'mobile_app_settings.backend.api.get_list_mobile_setting_controller'
+
+mobile_app_settings_api_backend_copy:
+  path: '/copy/{id}'
+  methods:
+    - 'POST'
+  controller: 'mobile_app_settings.backend.api.copy_mobile_setting_controller'

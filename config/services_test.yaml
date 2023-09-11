@@ -1,0 +1,5 @@
+services:
+  _defaults:
+    public: true
+
+  test.mobile_app_settings.mobile_app_setting.search.service: '@mobile_app_settings.mobile_app_setting.search.service'

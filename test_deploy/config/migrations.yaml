@@ -1,0 +1,11 @@
+services:
+
+  mobile_app_settings.migrations.m1682896433_rebuild_search:
+    class: GinCms\Bundle\MobileAppSettingsBundle\Resources\migrations\m1682896433_rebuild_search
+    arguments:
+      - '@kernel'
+      - '@redis_search.index.redi_search.manager'
+      - '@mobile_app_settings.mobile_app_setting.schema'
+      - '%mobile_app_settings.storage.entity.type%'
+    tags:
+      - { name: 'migrations.element' }

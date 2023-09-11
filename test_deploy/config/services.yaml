@@ -1,0 +1,35 @@
+imports:
+  - { resource: 'controllers.yaml' }
+  - { resource: 'services/*.yaml' }
+  - { resource: 'migrations.yaml' }
+
+services:
+  mobile_app_settings.event_listener.configure_menu_listener:
+    class: GinCms\Bundle\MobileAppSettingsBundle\EventListener\ConfigureMenuListener
+    tags:
+      - { name: kernel.event_listener, event: admin.menu_configure, method: onMenuConfigure }
+
+  mobile_app_settings.form.mobile_app_setting_type:
+    class: GinCms\Bundle\MobileAppSettingsBundle\Form\MobileAppSettingType
+    arguments:
+      - '@mobile_app_settings.mobile_app_setting.factory'
+      - '@mobile_app_settings.mobile_app_setting.id_generator'
+      - '@mobile_app_settings.mobile_app_setting.search.service'
+    tags:
+      - { name: form.type }
+
+  mobile_app_settings.storage.modifier.factory:
+    class: GinCms\Bundle\StorageBundle\Modifier\Factory\EntityModifierFactory
+    arguments:
+      - '@storage.key_builder'
+      - '@mobile_app_settings.mobile_app_setting.storage.entity.serializer'
+      - '@storage.reference_tracker.modifier.factory'
+      - '%mobile_app_settings.storage.key.tpl%'
+      - '%mobile_app_settings.storage.key.list.tpl%'
+
+  mobile_app_settings.modification.storage:
+    class: GinCms\Bundle\StorageBundle\RedisEntityModificationStorage
+    arguments:
+      - '@snc_redis.default'
+      - '@storage.updater.factory'
+      - '@mobile_app_settings.storage.modifier.factory'

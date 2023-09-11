@@ -1,0 +1,47 @@
+services:
+  _defaults:
+    public: true
+
+  mobile_app_settings.backend.api.create_mobile_setting_controller:
+    class: GinCms\Bundle\MobileAppSettingsBundle\Controller\Backend\Api\CreateMobileAppSettingController
+    arguments:
+      - '@form.factory'
+      - '@admin.api.response.factory'
+      - '@mobile_app_settings.mobile_app_setting.service'
+      - '@mobile_app_settings.mobile_app_setting.entity_data_mapper'
+
+  mobile_app_settings.backend.api.delete_mobile_setting_controller:
+    class: GinCms\Bundle\MobileAppSettingsBundle\Controller\Backend\Api\DeleteMobileAppSettingController
+    arguments:
+      - '@admin.api.response.factory'
+      - '@mobile_app_settings.mobile_app_setting.service'
+      - '@cms_logger.log.service'
+
+  mobile_app_settings.backend.api.edit_mobile_setting_controller:
+    class: GinCms\Bundle\MobileAppSettingsBundle\Controller\Backend\Api\EditMobileAppSettingController
+    arguments:
+      - '@form.factory'
+      - '@admin.api.response.factory'
+      - '@mobile_app_settings.mobile_app_setting.service'
+      - '@cms_logger.log.service'
+      - '@mobile_app_settings.mobile_app_setting.entity_data_mapper'
+
+  mobile_app_settings.backend.api.get_mobile_setting_controller:
+    class: GinCms\Bundle\MobileAppSettingsBundle\Controller\Backend\Api\GetMobileAppSettingController
+    arguments:
+      - '@mobile_app_settings.mobile_app_setting.service'
+      - '@admin.api.response.factory'
+      - '@mobile_app_settings.mobile_app_setting.entity_data_mapper'
+
+  mobile_app_settings.backend.api.get_list_mobile_setting_controller:
+    class: GinCms\Bundle\MobileAppSettingsBundle\Controller\Backend\Api\GetListMobileAppSettingController
+    arguments:
+      - '@admin.api.response.factory'
+      - '@mobile_app_settings.mobile_app_setting.entity_data_mapper'
+      - '@mobile_app_settings.mobile_app_setting.search.service'
+
+  mobile_app_settings.backend.api.copy_mobile_setting_controller:
+    class: GinCms\Bundle\MobileAppSettingsBundle\Controller\Backend\Api\CopyMobileAppSettingController
+    arguments:
+      - '@admin.api.response.factory'
+      - '@mobile_app_settings.mobile_app_setting.service'

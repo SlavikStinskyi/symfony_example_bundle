@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" backupGlobals="false" colors="true" bootstrap="vendor/autoload.php" cacheResultFile="var/cache/.phpunit.result.cache">
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+    </coverage>
+    <php>
+        <ini name="error_reporting" value="-1"/>
+        <env name="KERNEL_CLASS" value="\GinCms\Bundle\TestBundle\TestKernel"/>
+        <env name="APP_ENV" value="test"/>
+        <env name="APP_DEBUG" value="1"/>
+        <env name="APP_SECRET" value="s$cretf0rt3st"/>
+        <env name="SHELL_VERBOSITY" value="-1"/>
+    </php>
+    <testsuites>
+        <testsuite name="Test Suite">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <extensions>
+        <extension class="GameInspire\Docker\PhpUnit\DockerPhpUnitExtension">
+            <arguments>
+                <array>
+                    <element key="redis">
+                        <array>
+                            <element key="image"><string>redislabs/redisearch:2.0.3</string></element>
+                        </array>
+                    </element>
+                </array>
+                <string>cms_</string>
+            </arguments>
+        </extension>
+    </extensions>
+</phpunit>

@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    public: true
+
+  GinCms\Bundle\MobileAppSettingsBundle\Graphql\Type\MobileSettingsType:
+    class: GinCms\Bundle\MobileAppSettingsBundle\Graphql\Type\MobileSettingsType
+    tags:
+      - { name: 'graphqlite.type' }

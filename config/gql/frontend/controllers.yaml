@@ -1,0 +1,10 @@
+services:
+  _defaults:
+    public: true
+
+  GinCms\Bundle\MobileAppSettingsBundle\Graphql\Frontend\Controller\GetMobileSettingsController:
+    class: GinCms\Bundle\MobileAppSettingsBundle\Graphql\Frontend\Controller\GetMobileSettingsController
+    arguments:
+      - '@mobile_app_settings.mobile_app_setting.service'
+    tags:
+      - { name: 'graphqlite.controller' }

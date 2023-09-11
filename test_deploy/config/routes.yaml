@@ -1,0 +1,22 @@
+mobile_app_settings_backend_api:
+  resource: '@MobileAppSettingsBundle/config/routes/backend/admin_api.yaml'
+  prefix: '%admin.api_routing.prefix%/%mobile_app_settings.backend.prefix%/'
+  trailing_slash_on_root: false
+  defaults:
+    _security: ROLE_BONUS_MANAGER
+
+mobile_app_settings_backend:
+  path: '%admin.routing.prefix%/%mobile_app_settings.backend.prefix%/{uri}'
+  requirements:
+    uri: '.*'
+  defaults:
+    uri: ''
+  methods:
+    - 'GET'
+  controller: 'admin.controller.vue'
+
+pages_bundle_admin_page_edit:
+  path: '%admin.routing.prefix%/%mobile_app_settings.backend.prefix%/{id}'
+  methods:
+    - 'GET'
+  controller: 'admin.controller.vue'

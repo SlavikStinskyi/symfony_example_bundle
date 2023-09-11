@@ -1,0 +1,95 @@
+parameters:
+  mobile_app_settings.storage.entity.type:  'mobile_app_setting'
+  mobile_app_settings.storage.key.tpl:      'mobile_app_setting:storage'
+  mobile_app_settings.storage.key.list.tpl: 'mobile_app_setting:list'
+
+  mobile_app_settings.backend.prefix: 'mobile/settings'
+
+services:
+  mobile_app_settings.mobile_app_setting.factory:
+    class: GinCms\Bundle\MobileAppSettingsBundle\MobileAppSetting\Factory\MobileAppSettingFactory
+    arguments:
+      - '@mobile_app_settings.mobile_app_setting.id_generator'
+
+  mobile_app_settings.mobile_app_setting.id_generator:
+    class: GinCms\Bundle\MobileAppSettingsBundle\MobileAppSetting\Generator\MobileAppSettingIdGenerator
+    arguments:
+      - '@id_generator'
+      - '%mobile_app_settings.storage.entity.type%'
+
+  mobile_app_settings.mobile_app_setting.entity_data_mapper:
+    class: GinCms\Bundle\MobileAppSettingsBundle\MobileAppSetting\Mapper\MobileAppSettingDataMapper
+    arguments:
+      - '@mobile_app_settings.mobile_app_setting.factory'
+      - false
+
+  mobile_app_settings.mobile_app_setting.storage_entity_data_mapper:
+    class: GinCms\Bundle\MobileAppSettingsBundle\MobileAppSetting\Mapper\MobileAppSettingDataMapper
+    arguments:
+      - '@mobile_app_settings.mobile_app_setting.factory'
+      - true
+
+  mobile_app_settings.mobile_app_setting.storage.entity.serializer:
+    class: GinCms\Bundle\MobileAppSettingsBundle\MobileAppSetting\Storage\Entity\Serializer\MobileAppSettingEntitySerializerAdapter
+    arguments:
+      - '@mobile_app_settings.mobile_app_setting.storage_entity_data_mapper'
+
+  mobile_app_settings.mobile_app_setting.storage:
+    class: GinCms\Bundle\MobileAppSettingsBundle\MobileAppSetting\Storage\MobileAppSettingStorage
+    arguments:
+      - '@snc_redis.default'
+      - '@storage.key_builder'
+      - '@storage.updater.factory'
+      - '@mobile_app_settings.storage.modifier.factory'
+      - '@mobile_app_settings.mobile_app_setting.storage.entity.serializer'
+      - '@storage.reference_tracker'
+      - '%mobile_app_settings.storage.entity.type%'
+      - '%mobile_app_settings.storage.key.tpl%'
+      - '%mobile_app_settings.storage.key.list.tpl%'
+    tags:
+      - { name: 'storage', type: 'mobile-app-settins' }
+      - { name: 'jaeger.decorate' }
+
+  mobile_app_settings.mobile_app_setting.service:
+    class: GinCms\Bundle\MobileAppSettingsBundle\MobileAppSetting\Service\MobileAppSettingService
+    arguments:
+      - '@mobile_app_settings.mobile_app_setting.storage'
+      - '@mobile_app_settings.modification.storage'
+      - '@redis_search.index.redi_search.index_service'
+      - '@mobile_app_settings.mobile_app_setting.schema'
+      - '@result.factory'
+      - '@error.factory'
+      - '@mobile_app_settings.mobile_app_setting.entity_data_mapper'
+      - '@mobile_app_settings.mobile_app_setting.factory'
+
+  mobile_app_settings.mobile_app_setting.schema:
+    class: GinCms\Bundle\MobileAppSettingsBundle\MobileAppSetting\RedisSearch\Schema\MobileAppSettingIndexSchema
+    arguments:
+      - '@redis_search.string_normalizer'
+      - '%mobile_app_settings.storage.entity.type%'
+
+  mobile_app_settings.mobile_app_setting.redis_search.rebuild_index.data_provider:
+    class: GinCms\Bundle\MobileAppSettingsBundle\MobileAppSetting\RedisSearch\RebuildIndex\Provider\MobileAppSettingSearchRebuildIndexServiceDataProvider
+    arguments:
+      - '@mobile_app_settings.mobile_app_setting.schema'
+      - '@mobile_app_settings.mobile_app_setting.storage'
+      - '%mobile_app_settings.storage.entity.type%'
+    tags:
+      - { name: 'redis_search.rebuild_index.data_provider' }
+
+  mobile_app_settings.mobile_app_setting.search.query.builder.factory:
+    class: GinCms\Bundle\MobileAppSettingsBundle\MobileAppSetting\RedisSearch\Search\Query\Builder\Factory\MobileAppSettingQueryBuilderFactory
+    arguments:
+      - '@redis_search.string_normalizer'
+      - '@mobile_app_settings.mobile_app_setting.schema'
+
+  mobile_app_settings.mobile_app_setting.search.service.result.factory:
+    class: GinCms\Bundle\MobileAppSettingsBundle\MobileAppSetting\RedisSearch\Search\Service\Result\Factory\MobileAppSettingSearchServiceResultFactory
+
+  mobile_app_settings.mobile_app_setting.search.service:
+    class: GinCms\Bundle\MobileAppSettingsBundle\MobileAppSetting\RedisSearch\Search\Service\MobileAppSettingSearchService
+    arguments:
+      - '@mobile_app_settings.mobile_app_setting.storage'
+      - '@mobile_app_settings.mobile_app_setting.search.service.result.factory'
+      - '@mobile_app_settings.mobile_app_setting.search.query.builder.factory'
+      - '@redis_search.redi_search.search.service'
